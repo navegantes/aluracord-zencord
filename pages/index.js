@@ -131,6 +131,9 @@ export default function PaginaInicial() {
                 border: "none",
                 backgroundColor: "#ecfbfe",
                 boxShadow: "inset 6px 6px 10px #dbe9ec, inset -6px -6px 10px #fdffff",
+                borderRadius: "1000px",
+                padding: " 10px 20px",
+                marginBottom: "12px",
               }}
             />
             <Button
@@ -139,9 +142,12 @@ export default function PaginaInicial() {
               fullWidth
               buttonColors={{
                 contrastColor: appConfig.theme.colors.neutrals["200"],
-                mainColor: appConfig.theme.colors.neutrals[300],
-                mainColorLight: appConfig.theme.colors.neutrals[300],
-                mainColorStrong: appConfig.theme.colors.neutrals[400],
+                mainColor: appConfig.theme.colors.light["00"],
+                // mainColorLight: appConfig.theme.colors.neutrals[200],
+                mainColorStrong: appConfig.theme.colors.neutrals[300],
+              }}
+              styleSheet={{
+                borderRadius: "1000px",
                 boxShadow: appConfig.theme.colors.light["bs0"],
               }}
             />
@@ -169,6 +175,7 @@ export default function PaginaInicial() {
               styleSheet={{
                 borderRadius: "50%",
                 marginBottom: "16px",
+                // boxShadow: appConfig.theme.colors.light["bs0"],
               }}
               src={`https://github.com/${username}.png`}
             />

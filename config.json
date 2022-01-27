@@ -1,5 +1,5 @@
 {
-  "name": "Zencord - Debate politico sem estresse",
+  "name": "Zencord - Política, Futebol e Religião sem estresse",
   "theme": {
     "colors": {
       "primary": {
@@ -32,7 +32,7 @@
         "00": "#ecfbfe",
         "01": "#e9e6ff",
         "bs0": "12px 12px 24px #d9e7ea, -12px -12px 24px #ffffff",
-        "bs1": "inset 8px 8px 14px #deecef, inset -8px -8px 14px #faffff"
+        "bs1": "inset 8px 8px 10px #deecef, inset -8px -8px 10px #faffff"
       },
       "dark": {
         "00": "#2B3D41",
