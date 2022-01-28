@@ -106,7 +106,7 @@ export default function PaginaInicial() {
                   }
             }
           >
-            <Titulo tag="h2">Bem-vindos ao lar</Titulo>
+            <Titulo tag="h2">Bem-vindos a Zion</Titulo>
             <Text
               variant="body3"
               styleSheet={{
