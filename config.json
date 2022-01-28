@@ -1,5 +1,5 @@
 {
-  "name": "Zencord - Política, Futebol e Religião sem estresse",
+  "name": "Zencord - Central de Controle Zion.",
   "theme": {
     "colors": {
       "primary": {
@@ -32,6 +32,7 @@
         "00": "#ecfbfe",
         "01": "#e9e6ff",
         "bs0": "12px 12px 24px #d9e7ea, -12px -12px 24px #ffffff",
+        "bs00": "6px 6px 6px #d9e7ea, -6px -6px 6px #ffffff",
         "bs1": "inset 8px 8px 10px #deecef, inset -8px -8px 10px #faffff"
       },
       "dark": {
