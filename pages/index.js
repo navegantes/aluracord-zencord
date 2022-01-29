@@ -80,7 +80,7 @@ export default function PaginaInicial() {
             onSubmit={(event) => {
               event.preventDefault();
               if (isFormEnable) {
-                console.log("Pagina submetida");
+                // console.log("Pagina submetida");
                 roteamento.push("/chat");
               }
             }}
@@ -159,14 +159,14 @@ export default function PaginaInicial() {
                       borderRadius: "1000px",
                       boxShadow: "none",
                       padding: "15px 0px 15px",
-                      transition: "box-shadow 2s",
+                      transition: "box-shadow .5s",
                       // border: "1px solide black",
                     }
                   : {
                       width: "80%",
                       borderRadius: "1000px",
                       boxShadow: appConfig.theme.colors.light["bs0"],
-                      transition: "box-shadow 2s",
+                      transition: "box-shadow .5s",
                       hover: {
                         boxShadow: appConfig.theme.colors.light["bs00"],
                       },
