@@ -1,35 +1,70 @@
-import { Box, Text, TextField, Image, Button, Icon } from "@skynexui/components";
-import React, { useState } from "react";
+import { Box, Text, TextField, Image, Button } from "@skynexui/components";
+import { useState, useEffect } from "react";
+import { createClient } from "@supabase/supabase-js";
 import appConfig from "../config.json";
+
+const SUPABASE_ANON_KEY =
+  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiYW5vbiIsImlhdCI6MTY0MzQzNzA1MSwiZXhwIjoxOTU5MDEzMDUxfQ.EqLlvrV_ICTIN_lLiOwekQwxBkNk3yrvGmIP5NhwVFs";
+const SUPABASE_URL = "https://fbnphjfxswmlcwcgbgdg.supabase.co";
+const supabaseClient = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
 export default function ChatPage() {
   // Sua lógica vai aqui
   const [mensagem, setMensagem] = useState("");
   const [listaMsg, setListaMsg] = useState([]);
   const [isMsgEnable, setIsMsgEnable] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    const dadosSupabase = supabaseClient
+      .from("mensagens")
+      .select("*")
+      .order("id", { ascending: false })
+      .then(({ data }) => {
+        // console.log("Dados da consulta", dados);
+        setListaMsg(data);
+        setTimeout(() => {
+          setIsLoading(false);
+        }, 3300);
+        // setIsLoading(true);
+      });
+  }, []);
 
   function handleNovaMsg(novaMsg) {
     const mensagem = {
-      id: listaMsg.length + 1,
+      // id: listaMsg.length + 1,
       de: "navegantes",
-      texto: novaMsg.trim(),
+      texto: novaMsg,
     };
 
-    if (mensagem.texto != "") {
-      setListaMsg([mensagem, ...listaMsg]);
-    }
-    setMensagem("");
-    setIsMsgEnable(false);
+    supabaseClient
+      .from("mensagens")
+      .insert([mensagem])
+      .then(({ data }) => {
+        // console.log('Criando mensagem', resp);
+        if (mensagem.texto.trim() != "") {
+          setListaMsg([data[0], ...listaMsg]);
+        }
+        setMensagem("");
+        setIsMsgEnable(false);
+      });
   }
 
-  function removerMensagem(mensagemId) {
-    setListaMsg(listaMsg.filter((msg) => msg.id != mensagemId));
+  async function removerMensagem(mensagemId) {
+    try {
+      await supabaseClient.from("mensagens").delete().match({ id: mensagemId });
+      console.log("Menssagem excluida");
+      setListaMsg(listaMsg.filter((msg) => msg.id != mensagemId));
+    } catch (error) {
+      console.log(error);
+    }
   }
   // ./Sua lógica vai aqui
 
   return (
     <Box
       styleSheet={{
+        position: "relative",
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
@@ -37,130 +72,176 @@ export default function ChatPage() {
         color: appConfig.theme.colors.neutrals["300"],
       }}
     >
-      <Box
-        styleSheet={{
-          display: "flex",
-          flexDirection: "column",
-          flex: 1,
-          boxShadow: appConfig.theme.colors.light["bs1"],
-          borderRadius: "10px",
-          backgroundColor: appConfig.theme.colors.light["00"],
-          height: "100%",
-          maxWidth: "70%",
-          maxHeight: "90vh",
-          padding: "20px 46px",
-        }}
-      >
-        <Header />
+      {isLoading ? (
+        <>
+          <Box
+            as="span"
+            className="waves"
+            styleSheet={{
+              position: "absolute",
+              height: "130px",
+              width: "130px",
+              borderRadius: "1000px",
+              animation: "shockwaves 2s ease-out infinite",
+            }}
+          />
+          <Box
+            as="span"
+            className="waves"
+            styleSheet={{
+              position: "absolute",
+              height: "130px",
+              width: "130px",
+              borderRadius: "1000px",
+              animation: "shockwaves 2s ease-out 1s infinite",
+            }}
+          />
+          INICIANDO...
+        </>
+      ) : (
         <Box
           styleSheet={{
-            position: "relative",
             display: "flex",
-            flex: 1,
-            height: "80%",
-            backgroundColor: appConfig.theme.colors.light["00"],
-            boxShadow: appConfig.theme.colors.light["bs0"],
             flexDirection: "column",
+            flex: 1,
+            boxShadow: appConfig.theme.colors.light["bs1"],
             borderRadius: "10px",
-            padding: "20px 30px 2px",
-            marginBottom: "30px",
+            backgroundColor: appConfig.theme.colors.light["00"],
+            height: "100%",
+            maxWidth: "70%",
+            maxHeight: "90vh",
+            padding: "20px 46px",
           }}
         >
-          <MessageList mensagens={listaMsg} removerMensagem={removerMensagem} />
-
+          <Header />
           <Box
-            as="form"
             styleSheet={{
+              position: "relative",
               display: "flex",
-              alignItems: "center",
+              flex: 1,
+              height: "80%",
+              backgroundColor: appConfig.theme.colors.light["00"],
+              boxShadow: appConfig.theme.colors.light["bs0"],
               flexDirection: "column",
-              height: "auto",
-              padding: "0px 40px",
-              // border: "2px solid lime",
+              borderRadius: "10px",
+              padding: "20px 30px 2px",
+              marginBottom: "30px",
             }}
           >
-            <TextField
-              value={mensagem}
-              onChange={(ev) => {
-                ev.preventDefault();
-                if (ev.target.value.length > 0) {
-                  setIsMsgEnable(true);
-                } else {
-                  setIsMsgEnable(false);
-                }
-                setMensagem(ev.target.value);
-              }}
-              onKeyPress={(ev) => {
-                if (ev.key === "Enter") {
-                  ev.preventDefault();
-                  handleNovaMsg(mensagem);
-                }
-              }}
-              placeholder="Insira sua mensagem aqui..."
-              type="textarea"
+            <MessageList mensagens={listaMsg} removerMensagem={removerMensagem} />
+
+            <Box
+              as="form"
               styleSheet={{
                 display: "flex",
-                mainAxisAlignment: "center",
-                width: "100%",
-                border: "0",
-                resize: "none",
-                borderRadius: "10px",
-                padding: "6px 8px",
-                marginBottom: "16px",
-                backgroundColor: appConfig.theme.colors.light["00"],
-                boxShadow: appConfig.theme.colors.light["bs2"],
-                marginRight: "18px",
-                padding: "16px 20px 10px",
-                color: appConfig.theme.colors.neutrals[300],
+                alignItems: "center",
+                flexDirection: "column",
+                height: "auto",
+                padding: "0px 40px",
               }}
-            />
-            <Button
-              type="submit"
-              label="Enviar"
-              disabled={!isMsgEnable}
-              onClick={(ev) => {
-                ev.preventDefault();
-                handleNovaMsg(mensagem);
-              }}
-              buttonColors={{
-                mainColor: appConfig.theme.colors.light["00"],
-                mainColorStrong: appConfig.theme.colors.light["00"],
-              }}
-              styleSheet={
-                isMsgEnable
-                  ? {
-                      display: "flex",
-                      alignSelf: "flex-end",
-                      boxShadow: appConfig.theme.colors.light["bs0"],
-                      borderRadius: "1000px",
-                      padding: "8px",
-                      margin: "0px 18px 18px",
-                      width: "100px",
-                      color: appConfig.theme.colors.neutrals["200"],
-                      transition: "box-shadow 1s, color 2s",
-                      hover: {
+            >
+              <TextField
+                value={mensagem}
+                onChange={(ev) => {
+                  ev.preventDefault();
+                  if (ev.target.value.length > 0) {
+                    setIsMsgEnable(true);
+                  } else {
+                    setIsMsgEnable(false);
+                  }
+                  setMensagem(ev.target.value);
+                }}
+                onKeyPress={(ev) => {
+                  if (ev.key === "Enter") {
+                    ev.preventDefault();
+                    handleNovaMsg(mensagem);
+                  }
+                }}
+                placeholder="Insira sua mensagem aqui..."
+                type="textarea"
+                styleSheet={{
+                  display: "flex",
+                  mainAxisAlignment: "center",
+                  width: "100%",
+                  border: "0",
+                  resize: "none",
+                  borderRadius: "10px",
+                  padding: "6px 8px",
+                  marginBottom: "16px",
+                  backgroundColor: appConfig.theme.colors.light["00"],
+                  boxShadow: appConfig.theme.colors.light["bs2"],
+                  marginRight: "18px",
+                  padding: "16px 20px 10px",
+                  color: appConfig.theme.colors.neutrals[300],
+                }}
+              />
+              <Image
+                styleSheet={
+                  !isMsgEnable
+                    ? {
+                        boxShadow: "none",
+                        opacity: "0",
+                        transition: "box-shadow 2s, opacity 2s",
+                      }
+                    : {
+                        borderRadius: "50%",
+                        marginBottom: "20px",
+                        maxWidth: "90%",
                         boxShadow: appConfig.theme.colors.light["bs00"],
-                      },
-                      focus: {
-                        boxShadow: appConfig.theme.colors.light["bs00"],
-                      },
-                    }
-                  : {
-                      display: "flex",
-                      alignSelf: "flex-end",
-                      boxShadow: "none",
-                      width: "100px",
-                      borderRadius: "1000px",
-                      color: appConfig.theme.colors.light["00"],
-                      padding: "8px",
-                      margin: "0px 18px 18px",
-                      transition: "box-shadow 2s, color 2s",
-                    }
-              }
-            />
+                        opacity: "1",
+                        transition: "box-shadow 2s, opacity 3s",
+                      }
+                }
+                src={isMsgEnable ? `https://github.com/${mensagem.de}.png` : ""}
+              />
+              <Button
+                type="submit"
+                label="Enviar"
+                disabled={!isMsgEnable}
+                onClick={(ev) => {
+                  ev.preventDefault();
+                  handleNovaMsg(mensagem);
+                }}
+                buttonColors={{
+                  mainColor: appConfig.theme.colors.light["00"],
+                  mainColorStrong: appConfig.theme.colors.light["00"],
+                }}
+                styleSheet={
+                  isMsgEnable
+                    ? {
+                        display: "flex",
+                        alignSelf: "flex-end",
+                        boxShadow: appConfig.theme.colors.light["bs0"],
+                        borderRadius: "1000px",
+                        padding: "8px",
+                        margin: "0px 18px 18px",
+                        width: "100px",
+                        color: appConfig.theme.colors.neutrals["200"],
+                        transition: "box-shadow 1s, color 2s",
+                        hover: {
+                          boxShadow: appConfig.theme.colors.light["bs00"],
+                        },
+                        focus: {
+                          boxShadow: appConfig.theme.colors.light["bs00"],
+                        },
+                      }
+                    : {
+                        display: "flex",
+                        alignSelf: "flex-end",
+                        boxShadow: "none",
+                        width: "100px",
+                        borderRadius: "1000px",
+                        color: appConfig.theme.colors.light["00"],
+                        padding: "8px",
+                        margin: "0px 18px 18px",
+                        transition: "box-shadow 2s, color 2s",
+                      }
+                }
+              />
+            </Box>
           </Box>
         </Box>
-      </Box>
+      )}
     </Box>
   );
 }
@@ -244,10 +325,15 @@ function MessageList({ mensagens, removerMensagem }) {
                 }}
                 tag="span"
               >
-                {new Date().toLocaleDateString()}
+                {new Date(mensagem.created_at).toLocaleString("pt-BR", {
+                  dateStyle: "short",
+                  timeStyle: "short",
+                })}
               </Text>
               <Button
+                // label="BUtao"
                 iconName="FaTimes"
+                size="xl"
                 buttonColors={{
                   mainColor: appConfig.theme.colors.light["00"],
                   mainColorStrong: appConfig.theme.colors.light["00"],
@@ -260,8 +346,8 @@ function MessageList({ mensagens, removerMensagem }) {
                   alignItems: "center",
                   justifyContent: "center",
                   marginLeft: "auto",
-                  fontSize: "18px",
-                  transition: "box-shadow 2s, color 2s, opacity 2s",
+                  fontSize: "20px",
+                  transition: "box-shadow 2s, color 2s, opacity 1s",
                   borderRadius: "500px",
                   opacity: "0",
                   hover: {

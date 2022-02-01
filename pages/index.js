@@ -122,7 +122,6 @@ export default function PaginaInicial() {
               onChange={function (event) {
                 setUsername(event.target.value);
               }}
-              // fullWidth
               styleSheet={{
                 border: "none",
                 textAlign: "center",
@@ -133,14 +132,12 @@ export default function PaginaInicial() {
                 padding: " 10px 20px",
                 marginBottom: "12px",
                 width: "80%",
-                // maxWidth: "60%",
               }}
             />
             <Button
               type="submit"
               label={!isFormEnable ? "" : "Entrar"}
               disabled={!isFormEnable}
-              // fullWidth
               buttonColors={
                 !isFormEnable
                   ? {
