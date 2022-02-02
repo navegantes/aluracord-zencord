@@ -1,6 +1,9 @@
-import { Box, Text, TextField, Image, Button } from "@skynexui/components";
+import { Box, Text, TextField, Image, Button, Icon } from "@skynexui/components";
 import { useState, useEffect } from "react";
+import { useRouter } from "next/router";
 import { createClient } from "@supabase/supabase-js";
+import { ButtonSendSticker } from "../src/components/ButtonSendStiker";
+
 import appConfig from "../config.json";
 
 const SUPABASE_ANON_KEY =
@@ -10,6 +13,8 @@ const supabaseClient = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
 export default function ChatPage() {
   // Sua lógica vai aqui
+  const roteamento = useRouter();
+  const userLogado = roteamento.query.username;
   const [mensagem, setMensagem] = useState("");
   const [listaMsg, setListaMsg] = useState([]);
   const [isMsgEnable, setIsMsgEnable] = useState(false);
@@ -23,6 +28,7 @@ export default function ChatPage() {
       .then(({ data }) => {
         // console.log("Dados da consulta", dados);
         setListaMsg(data);
+        // setTimeout Demonstração loading
         setTimeout(() => {
           setIsLoading(false);
         }, 3300);
@@ -33,7 +39,7 @@ export default function ChatPage() {
   function handleNovaMsg(novaMsg) {
     const mensagem = {
       // id: listaMsg.length + 1,
-      de: "navegantes",
+      de: userLogado,
       texto: novaMsg,
     };
 
@@ -70,6 +76,7 @@ export default function ChatPage() {
         justifyContent: "center",
         backgroundColor: appConfig.theme.colors.light["00"],
         color: appConfig.theme.colors.neutrals["300"],
+        overflowX: "hidden",
       }}
     >
       {isLoading ? (
@@ -103,14 +110,15 @@ export default function ChatPage() {
           styleSheet={{
             display: "flex",
             flexDirection: "column",
-            flex: 1,
+            // flex: 1,
             boxShadow: appConfig.theme.colors.light["bs1"],
             borderRadius: "10px",
             backgroundColor: appConfig.theme.colors.light["00"],
+            width: "auto",
             height: "100%",
             maxWidth: "70%",
             maxHeight: "90vh",
-            padding: "20px 46px",
+            padding: "20px 48px",
           }}
         >
           <Header />
@@ -124,22 +132,41 @@ export default function ChatPage() {
               boxShadow: appConfig.theme.colors.light["bs0"],
               flexDirection: "column",
               borderRadius: "10px",
-              padding: "20px 30px 2px",
-              marginBottom: "30px",
+              padding: "20px 26px 2px 20px",
+              marginBottom: "8px",
             }}
           >
             <MessageList mensagens={listaMsg} removerMensagem={removerMensagem} />
-
             <Box
               as="form"
               styleSheet={{
                 display: "flex",
                 alignItems: "center",
-                flexDirection: "column",
-                height: "auto",
-                padding: "0px 40px",
+                justifyContent: "space-around",
+                flexDirection: "row",
+                marginTop: "auto",
+                padding: "10px 0px",
               }}
             >
+              <Box
+                styleSheet={{
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "space-around",
+                  width: "62px",
+                }}
+              >
+                <Image
+                  styleSheet={{
+                    borderRadius: "50%",
+                    maxWidth: "90%",
+                    boxShadow: appConfig.theme.colors.light["bs00"],
+                    opacity: "1",
+                    transition: "box-shadow 2s, opacity 2s",
+                  }}
+                  src={`https://github.com/${userLogado}.png`}
+                />
+              </Box>
               <TextField
                 value={mensagem}
                 onChange={(ev) => {
@@ -157,43 +184,25 @@ export default function ChatPage() {
                     handleNovaMsg(mensagem);
                   }
                 }}
-                placeholder="Insira sua mensagem aqui..."
+                placeholder="Sua mensagem..."
                 type="textarea"
                 styleSheet={{
                   display: "flex",
-                  mainAxisAlignment: "center",
-                  width: "100%",
+                  // mainAxisAlignment: "center",
+                  width: "80%",
                   border: "0",
                   resize: "none",
                   borderRadius: "10px",
                   padding: "6px 8px",
-                  marginBottom: "16px",
+                  margin: "8px 16px 12px",
                   backgroundColor: appConfig.theme.colors.light["00"],
                   boxShadow: appConfig.theme.colors.light["bs2"],
-                  marginRight: "18px",
-                  padding: "16px 20px 10px",
+                  padding: "16px 20px 16px",
                   color: appConfig.theme.colors.neutrals[300],
                 }}
               />
-              <Image
-                styleSheet={
-                  !isMsgEnable
-                    ? {
-                        boxShadow: "none",
-                        opacity: "0",
-                        transition: "box-shadow 2s, opacity 2s",
-                      }
-                    : {
-                        borderRadius: "50%",
-                        marginBottom: "20px",
-                        maxWidth: "90%",
-                        boxShadow: appConfig.theme.colors.light["bs00"],
-                        opacity: "1",
-                        transition: "box-shadow 2s, opacity 3s",
-                      }
-                }
-                src={isMsgEnable ? `https://github.com/${mensagem.de}.png` : ""}
-              />
+
+              <ButtonSendSticker />
               <Button
                 type="submit"
                 label="Enviar"
@@ -210,14 +219,14 @@ export default function ChatPage() {
                   isMsgEnable
                     ? {
                         display: "flex",
-                        alignSelf: "flex-end",
-                        boxShadow: appConfig.theme.colors.light["bs0"],
                         borderRadius: "1000px",
-                        padding: "8px",
-                        margin: "0px 18px 18px",
+                        margin: "auto",
                         width: "100px",
+                        height: "50px",
+                        margin: "0px 18px 0px",
                         color: appConfig.theme.colors.neutrals["200"],
-                        transition: "box-shadow 1s, color 2s",
+                        transition: "box-shadow .5s, color 2s",
+                        boxShadow: appConfig.theme.colors.light["bs0"],
                         hover: {
                           boxShadow: appConfig.theme.colors.light["bs00"],
                         },
@@ -227,14 +236,13 @@ export default function ChatPage() {
                       }
                     : {
                         display: "flex",
-                        alignSelf: "flex-end",
-                        boxShadow: "none",
-                        width: "100px",
                         borderRadius: "1000px",
+                        margin: "0px 18px 0px",
+                        width: "100px",
+                        height: "50px",
                         color: appConfig.theme.colors.light["00"],
-                        padding: "8px",
-                        margin: "0px 18px 18px",
-                        transition: "box-shadow 2s, color 2s",
+                        transition: "box-shadow 2s, color .5s",
+                        boxShadow: "none",
                       }
                 }
               />
@@ -259,7 +267,26 @@ function Header() {
         }}
       >
         <Text variant="heading5">Controle de Zion</Text>
-        <Button variant="tertiary" colorVariant="neutral" label="Logout" href="/" />
+        <Button
+          variant="tertiary"
+          colorVariant="neutral"
+          label="Sair"
+          href="/"
+          buttonColors={{
+            mainColor: appConfig.theme.colors.neutrals["300"],
+            mainColorStrong: appConfig.theme.colors.light["00"],
+          }}
+          styleSheet={{
+            borderRadius: "500px",
+            marginBottom: "6px",
+            hover: {
+              boxShadow: appConfig.theme.colors.light["bs00"],
+            },
+            focus: {
+              boxShadow: appConfig.theme.colors.light["bs00"],
+            },
+          }}
+        />
       </Box>
     </>
   );
@@ -276,10 +303,11 @@ function MessageList({ mensagens, removerMensagem }) {
         scrollbarColor: appConfig.theme.colors.light["scrl"],
         scrollbarWidth: "thin",
         display: "flex",
+        alignItems: "center",
         flexDirection: "column-reverse",
-        flex: 1,
         color: appConfig.theme.colors.neutrals["000"],
         marginBottom: "8px",
+        padding: "0px 20px 16px",
       }}
     >
       {mensagens.map((mensagem) => {
@@ -288,15 +316,15 @@ function MessageList({ mensagens, removerMensagem }) {
             key={mensagem.id}
             tag="li"
             styleSheet={{
-              borderRadius: "5px",
+              borderRadius: "15px",
               padding: "12px",
-              margin: "0px 28px 16px 12px",
-              boxShadow: appConfig.theme.colors.light["bs1"],
-              transition: "box-shadow 3s",
+              margin: "12px 0px",
+              width: "85%",
               color: appConfig.theme.colors.neutrals[300],
+              boxShadow: appConfig.theme.colors.light["bs1"],
               hover: {
-                // backgroundColor: appConfig.theme.colors.light["00"],
                 boxShadow: appConfig.theme.colors.light["bs0"],
+                transition: "box-shadow 1s",
               },
             }}
           >
@@ -321,7 +349,6 @@ function MessageList({ mensagens, removerMensagem }) {
                 styleSheet={{
                   fontSize: "10px",
                   marginLeft: "12px",
-                  color: appConfig.theme.colors.neutrals[300],
                 }}
                 tag="span"
               >
@@ -331,9 +358,9 @@ function MessageList({ mensagens, removerMensagem }) {
                 })}
               </Text>
               <Button
-                // label="BUtao"
-                iconName="FaTimes"
-                size="xl"
+                label={<Icon name="FaTimes" />}
+                // iconName="times"
+                // size="md"
                 buttonColors={{
                   mainColor: appConfig.theme.colors.light["00"],
                   mainColorStrong: appConfig.theme.colors.light["00"],
@@ -345,8 +372,9 @@ function MessageList({ mensagens, removerMensagem }) {
                   display: "flex",
                   alignItems: "center",
                   justifyContent: "center",
+                  width: "32px",
+                  height: "32px",
                   marginLeft: "auto",
-                  fontSize: "20px",
                   transition: "box-shadow 2s, color 2s, opacity 1s",
                   borderRadius: "500px",
                   opacity: "0",
@@ -370,6 +398,12 @@ function MessageList({ mensagens, removerMensagem }) {
                 marginLeft: "20px",
                 color: appConfig.theme.colors.neutrals[300],
                 padding: "0px 10px",
+                overflow: "auto",
+                scrollbarColor: appConfig.theme.colors.light["scrl"],
+                scrollbarWidth: "thin",
+                wordBreak: "break-all",
+                minWidth: "40wv",
+                maxHeight: "50px",
               }}
             >
               {mensagem.texto}

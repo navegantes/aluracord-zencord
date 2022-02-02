@@ -81,7 +81,7 @@ export default function PaginaInicial() {
               event.preventDefault();
               if (isFormEnable) {
                 // console.log("Pagina submetida");
-                roteamento.push("/chat");
+                roteamento.push(`/chat?username=${username}`);
               }
             }}
             styleSheet={
