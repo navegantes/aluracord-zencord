@@ -213,7 +213,6 @@ export default function ChatPage() {
                 type="textarea"
                 styleSheet={{
                   display: "flex",
-                  // mainAxisAlignment: "center",
                   width: "80%",
                   border: "0",
                   resize: "none",
