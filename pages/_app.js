@@ -1,4 +1,7 @@
 import appConfig from "../config.json";
+import toast, { Toaster } from "react-hot-toast";
+
+// const notify = () => toast("Here is your toast.");
 
 function GlobalStyle() {
   return (
@@ -62,6 +65,7 @@ export default function MyApp({ Component, pageProps }) {
     <>
       <GlobalStyle />
       <Component {...pageProps} />
+      <Toaster />
     </>
   );
 }

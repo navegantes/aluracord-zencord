@@ -1,8 +1,8 @@
 import React from "react";
 import { Box, Button, Text, Image } from "@skynexui/components";
-import appConfig from "../../config.json";
+import appConfig from "../../../config.json";
 
-export function ButtonSendSticker(props) {
+export default function ButtonSendSticker(props) {
   const [isOpen, setOpenState] = React.useState("");
 
   return (
@@ -29,9 +29,10 @@ export function ButtonSendSticker(props) {
           justifyContent: "center",
           backgroundColor: appConfig.theme.colors.light["00"],
           boxShadow: appConfig.theme.colors.light["bs0"],
-          // filter: isOpen ? "grayscale(0)" : "grayscale(1)",
+          filter: isOpen ? "grayscale(0)" : "grayscale(1)",
           hover: {
             boxShadow: appConfig.theme.colors.light["bs00"],
+            filter: "grayscale(0)",
           },
           focus: {
             boxShadow: appConfig.theme.colors.light["bs00"],
@@ -49,8 +50,8 @@ export function ButtonSendSticker(props) {
             position: "absolute",
             backgroundColor: appConfig.theme.colors.light["00"],
             width: {
-              xs: "200px",
-              sm: "290px",
+              xs: "300px",
+              sm: "390px",
             },
             height: "300px",
             right: "30px",
