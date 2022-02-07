@@ -46,7 +46,7 @@ function GlobalStyle() {
           opacity: 1;
         }
         100% {
-          transform: scale(4);
+          transform: scale(5);
           opacity: 0;
         }
       }

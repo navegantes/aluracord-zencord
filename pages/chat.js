@@ -82,7 +82,7 @@ export default function ChatPage() {
             return listaAtual.filter((msg) => msg.id != mensagem.id);
           }),
           toast.success("Mensagem excluida!"))
-        : toast.error("Você não pode excluir essa mensagem!");
+        : toast.error("Você não têm permissão para excluir essa mensagem!");
     } catch (error) {
       console.log(error);
     }
@@ -108,10 +108,10 @@ export default function ChatPage() {
             className="waves"
             styleSheet={{
               position: "absolute",
-              height: "130px",
-              width: "130px",
+              height: "160px",
+              width: "160px",
               borderRadius: "1000px",
-              animation: "shockwaves 2s ease-out infinite",
+              animation: "shockwaves 2.5s ease-out .5s infinite",
             }}
           />
           <Box
@@ -119,10 +119,10 @@ export default function ChatPage() {
             className="waves"
             styleSheet={{
               position: "absolute",
-              height: "130px",
-              width: "130px",
+              height: "160px",
+              width: "160px",
               borderRadius: "1000px",
-              animation: "shockwaves 2s ease-out 1s infinite",
+              animation: "shockwaves 2.5s ease-out infinite",
             }}
           />
           INICIANDO...
@@ -132,15 +132,10 @@ export default function ChatPage() {
           styleSheet={{
             display: "flex",
             flexDirection: "column",
-            boxShadow: appConfig.theme.colors.light["bs1"],
-            borderRadius: "10px",
             backgroundColor: appConfig.theme.colors.light["00"],
-            width: "60%",
+            width: "40%",
             height: "100%",
-            // maxWidth: "65rem",
-            minWidth: "36rem",
-            maxHeight: "85vh",
-            padding: "20px 48px",
+            maxHeight: "95vh",
           }}
         >
           <Header />
@@ -158,7 +153,11 @@ export default function ChatPage() {
               marginBottom: "8px",
             }}
           >
-            <MessageList mensagens={listaMsg} removerMensagem={removerMensagem} />
+            <MessageList
+              mensagens={listaMsg}
+              removerMensagem={removerMensagem}
+              loggedUser={userLogado}
+            />
 
             <Box
               as="form"

@@ -2,7 +2,7 @@ import React from "react";
 import { Box, Button, Text, Image, Icon } from "@skynexui/components";
 import appConfig from "../../../config.json";
 
-export default function MessageList({ mensagens, removerMensagem }) {
+export default function MessageList(props) {
   // console.log("MessageList", props);
 
   return (
@@ -10,28 +10,33 @@ export default function MessageList({ mensagens, removerMensagem }) {
       tag="ul"
       styleSheet={{
         overflowY: "auto",
-        scrollbarColor: appConfig.theme.colors.light["scrl"],
+        overflowAnchor: "auto",
+        // scrollbarColor: appConfig.theme.colors.light["00"],
         scrollbarWidth: "thin",
         display: "flex",
         alignItems: "center",
         flexDirection: "column-reverse",
-        color: appConfig.theme.colors.neutrals["000"],
+        // color: appConfig.theme.colors.light["00"],
         marginBottom: "8px",
         padding: "0px 20px 16px",
       }}
     >
-      {mensagens.map((mensagem) => {
+      {props.mensagens.map((mensagem) => {
         return (
           <Box
             key={mensagem.id}
             tag="li"
             styleSheet={{
+              // display: "flex",
+              // flexDirection: "column",
+              // alignSelf: `${props.loggedUser === mensagem.de ? "flex-start" : "flex-end"}`,
               borderRadius: "15px",
               padding: "12px",
               margin: "12px 0px",
-              width: "85%",
+              width: "95%",
               color: appConfig.theme.colors.neutrals[300],
-              boxShadow: appConfig.theme.colors.light["bs1"],
+              boxShadow: "", //appConfig.theme.colors.light["bs1"],
+              transition: "box-shadow 1s",
               hover: {
                 boxShadow: appConfig.theme.colors.light["bs0"],
                 transition: "box-shadow 1s",
@@ -40,34 +45,53 @@ export default function MessageList({ mensagens, removerMensagem }) {
           >
             <Box
               styleSheet={{
-                marginBottom: "8px",
+                // border: "1px solid green",
                 display: "flex",
+                flexDirection: "row",
+                justifyContent: `${props.loggedUser !== mensagem.de ? "end" : "space-between"}`,
               }}
             >
-              <Image
+              <Box
                 styleSheet={{
-                  width: "20px",
-                  height: "20px",
-                  borderRadius: "50%",
-                  display: "inline-block",
-                  marginRight: "8px",
+                  // border: "1px solid red",
+                  display: "flex",
+                  flexDirection: `${props.loggedUser !== mensagem.de ? "row-reverse" : "row"}`,
                 }}
-                src={`https://github.com/${mensagem.de}.png`}
-              />
-              <Text tag="strong">{mensagem.de}</Text>
-              <Text
-                styleSheet={{
-                  fontSize: "10px",
-                  marginLeft: "12px",
-                }}
-                tag="span"
               >
-                {new Date(mensagem.created_at).toLocaleString("pt-BR", {
-                  dateStyle: "short",
-                  timeStyle: "short",
-                })}
-              </Text>
-
+                <Image
+                  styleSheet={{
+                    width: "20px",
+                    height: "20px",
+                    borderRadius: "50%",
+                    display: "inline-block",
+                    marginRight: "8px",
+                  }}
+                  src={`https://github.com/${mensagem.de}.png`}
+                />
+                {/*implementer logica para simbolo de superuser */}
+                {mensagem.de === "navegantes" ? <Icon name="FaAward" /> : <></>}
+                <Text
+                  tag="strong"
+                  styleSheet={{
+                    fontSize: "16px",
+                    margin: "0px 6px",
+                  }}
+                >
+                  {mensagem.de}
+                </Text>
+                <Text
+                  styleSheet={{
+                    fontSize: "10px",
+                    // marginLeft: "12px",
+                  }}
+                  tag="span"
+                >
+                  {new Date(mensagem.created_at).toLocaleString("pt-BR", {
+                    dateStyle: "short",
+                    timeStyle: "short",
+                  })}
+                </Text>
+              </Box>
               <Button
                 label={<Icon name="FaTimes" />}
                 // iconName="times"
@@ -77,7 +101,7 @@ export default function MessageList({ mensagens, removerMensagem }) {
                   mainColorStrong: appConfig.theme.colors.light["00"],
                 }}
                 onClick={() => {
-                  removerMensagem(mensagem);
+                  props.removerMensagem(mensagem);
                   // removerMensagem(mensagem.id);
                 }}
                 styleSheet={{
@@ -86,7 +110,7 @@ export default function MessageList({ mensagens, removerMensagem }) {
                   justifyContent: "center",
                   width: "32px",
                   height: "32px",
-                  marginLeft: "auto",
+                  margin: "0px 8px 8px",
                   transition: "box-shadow 2s, color 2s, opacity 1s",
                   borderRadius: "500px",
                   opacity: "0",
@@ -100,14 +124,17 @@ export default function MessageList({ mensagens, removerMensagem }) {
                     color: appConfig.theme.colors.neutrals["200"],
                   },
                 }}
+                // disabled
               />
             </Box>
 
             <Text
               tag="span"
               styleSheet={{
+                display: "flex",
+                flexDirection: "column",
+                alignItems: `${props.loggedUser === mensagem.de ? "" : "end"}`,
                 fontSize: "14px",
-                marginLeft: "20px",
                 color: appConfig.theme.colors.neutrals[300],
                 padding: "0px 10px",
                 overflow: "auto",
@@ -127,7 +154,8 @@ export default function MessageList({ mensagens, removerMensagem }) {
                       // width: "110px",
                     }}
                   />
-                  {mensagem.texto.replace(":sticker:", "").trim().split(" ")[1]}
+                  {/* Separa o link do sticker da mensagem/legenda */}
+                  {mensagem.texto.replace(":sticker:", "").trim().split(" ").slice(1).join(" ")}
                 </>
               ) : (
                 mensagem.texto
