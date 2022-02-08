@@ -1,5 +1,5 @@
 import React from "react";
-import { Box, Button, Text } from "@skynexui/components";
+import { Box, Button, Text, Icon } from "@skynexui/components";
 
 import appConfig from "../../../config.json";
 
@@ -36,6 +36,26 @@ export default function Header() {
             },
           }}
         />
+        {/* <Button
+          variant="tertiary"
+          colorVariant="neutral"
+          label={<Icon name="FaCog" />}
+          // href="/"
+          buttonColors={{
+            mainColor: appConfig.theme.colors.neutrals["300"],
+            mainColorStrong: appConfig.theme.colors.light["00"],
+          }}
+          styleSheet={{
+            borderRadius: "500px",
+            marginBottom: "6px",
+            hover: {
+              boxShadow: appConfig.theme.colors.light["bs00"],
+            },
+            focus: {
+              boxShadow: appConfig.theme.colors.light["bs00"],
+            },
+          }}
+        /> */}
       </Box>
     </>
   );

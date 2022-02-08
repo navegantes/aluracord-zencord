@@ -49,6 +49,7 @@ export default function MessageList(props) {
                 display: "flex",
                 flexDirection: "row",
                 justifyContent: `${props.loggedUser !== mensagem.de ? "end" : "space-between"}`,
+                height: "40px",
               }}
             >
               <Box
@@ -92,40 +93,43 @@ export default function MessageList(props) {
                   })}
                 </Text>
               </Box>
-              <Button
-                label={<Icon name="FaTimes" />}
-                // iconName="times"
-                // size="md"
-                buttonColors={{
-                  mainColor: appConfig.theme.colors.light["00"],
-                  mainColorStrong: appConfig.theme.colors.light["00"],
-                }}
-                onClick={() => {
-                  props.removerMensagem(mensagem);
-                  // removerMensagem(mensagem.id);
-                }}
-                styleSheet={{
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  width: "32px",
-                  height: "32px",
-                  margin: "0px 8px 8px",
-                  transition: "box-shadow 2s, color 2s, opacity 1s",
-                  borderRadius: "500px",
-                  opacity: "0",
-                  hover: {
-                    boxShadow: appConfig.theme.colors.light["bs00"],
-                    opacity: "1",
-                    color: appConfig.theme.colors.neutrals["200"],
-                  },
-                  focus: {
-                    boxShadow: appConfig.theme.colors.light["bs00"],
-                    color: appConfig.theme.colors.neutrals["200"],
-                  },
-                }}
-                // disabled
-              />
+
+              {(props.loggedUser === mensagem.de || props.loggedUser === "navegantes") && (
+                <Button
+                  label={<Icon name="FaTimes" />}
+                  // iconName="times"
+                  // size="md"
+                  buttonColors={{
+                    mainColor: appConfig.theme.colors.light["00"],
+                    mainColorStrong: appConfig.theme.colors.light["00"],
+                  }}
+                  onClick={() => {
+                    props.removerMensagem(mensagem);
+                    // removerMensagem(mensagem.id);
+                  }}
+                  styleSheet={{
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    width: "32px",
+                    height: "32px",
+                    margin: "0px 8px 8px",
+                    transition: "box-shadow 2s, color 2s, opacity 1s",
+                    borderRadius: "500px",
+                    opacity: "0",
+                    hover: {
+                      boxShadow: appConfig.theme.colors.light["bs00"],
+                      opacity: "1",
+                      color: appConfig.theme.colors.neutrals["200"],
+                    },
+                    focus: {
+                      boxShadow: appConfig.theme.colors.light["bs00"],
+                      color: appConfig.theme.colors.neutrals["200"],
+                    },
+                  }}
+                  // disabled
+                />
+              )}
             </Box>
 
             <Text

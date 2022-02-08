@@ -73,18 +73,20 @@ export default function ChatPage() {
 
   async function removerMensagem(mensagem) {
     // console.log(mensagem);
-    try {
-      // implementar logica de ADMs para excluir qualquer mensagem
-      userLogado === mensagem.de || userLogado === "navegantes"
-        ? (await supabaseClient.from("mensagens").delete().match({ id: mensagem.id }),
-          // console.log("Menssagem excluida");
-          setListaMsg((listaAtual) => {
-            return listaAtual.filter((msg) => msg.id != mensagem.id);
-          }),
-          toast.success("Mensagem excluida!"))
-        : toast.error("Você não têm permissão para excluir essa mensagem!");
-    } catch (error) {
-      console.log(error);
+    if (confirm("Deseja realmente excluir a mensagem?")) {
+      try {
+        // implementar logica de ADMs para excluir qualquer mensagem
+        userLogado === mensagem.de || userLogado === "navegantes"
+          ? (await supabaseClient.from("mensagens").delete().match({ id: mensagem.id }),
+            // console.log("Menssagem excluida");
+            setListaMsg((listaAtual) => {
+              return listaAtual.filter((msg) => msg.id != mensagem.id);
+            }),
+            toast.success("Mensagem excluida!"))
+          : toast.error("Você não têm permissão para excluir essa mensagem!");
+      } catch (error) {
+        console.log(error);
+      }
     }
   }
   // ./Sua lógica vai aqui
@@ -166,7 +168,7 @@ export default function ChatPage() {
                 alignItems: "center",
                 justifyContent: "space-around",
                 flexDirection: "row",
-                marginTop: "auto",
+                // marginTop: "auto",
                 padding: "10px 0px",
               }}
             >
@@ -214,7 +216,7 @@ export default function ChatPage() {
                   display: "flex",
                   width: "80%",
                   border: "0",
-                  resize: "none",
+                  // resize: "none",
                   borderRadius: "10px",
                   padding: "6px 8px",
                   margin: "8px 16px 12px",
