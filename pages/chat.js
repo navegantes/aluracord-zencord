@@ -224,16 +224,15 @@ export default function ChatPage() {
                 placeholder="Sua mensagem..."
                 type="textarea"
                 styleSheet={{
-                  display: "flex",
+                  // display: "flex",
                   width: "80%",
                   border: "0",
                   // resize: "none",
                   borderRadius: "10px",
-                  padding: "6px 8px",
+                  padding: "10px 16px",
                   margin: "8px 16px 12px",
                   backgroundColor: appConfig.theme.colors.light["00"],
                   boxShadow: appConfig.theme.colors.light["bs2"],
-                  padding: "16px 20px 16px",
                   whiteSpace: "pre-wrap",
                   color: appConfig.theme.colors.neutrals[300],
                 }}

@@ -6,9 +6,9 @@ import { Grid } from '@giphy/react-components'
 import { GiphyFetch } from '@giphy/js-fetch-api'
 
 // use @giphy/js-fetch-api to fetch gifs, instantiate with your api key
-const gf = new GiphyFetch('n8MvfepusEeY294irysHRYphK8nTVewV')
+const gf = new GiphyFetch(process.env.NEXT_PUBLIC_GIPHY_KEY)
 
-const fetchGifs = (offset) => gf.trending({ offset, limit: 10, type: 'stickers' })
+const fetchGifs = (offset) => gf.trending({ offset, limit: 10, type: 'stickers', lang: 'pt_BR' })
 
 
 export default function ButtonSendSticker(props) {
@@ -59,8 +59,8 @@ export default function ButtonSendSticker(props) {
             position: "absolute",
             backgroundColor: appConfig.theme.colors.light["00"],
             width: {
-              xs: "300px",
-              sm: "390px",
+              xs: "400px",
+              sm: "490px",
             },
             height: "300px",
             right: "30px",
@@ -82,8 +82,8 @@ export default function ButtonSendSticker(props) {
             Giphy Trending
           </Text>
           <Grid
-            width={340}
-            columns={3}
+            width={440}
+            columns={4}
             fetchGifs={fetchGifs}
             onGifClick={(gif, e) => {
               console.log("gif", gif.images);
