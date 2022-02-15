@@ -62,13 +62,17 @@ export default function ChatPage() {
       texto: novaMsg,
     };
 
-    supabaseClient
-      .from("mensagens")
-      .insert([mensagem])
-      .then(({ data }) => {
-        setMensagem("");
-        setIsMsgEnable(false);
-      });
+    if (mensagem.texto.length) {
+      supabaseClient
+        .from("mensagens")
+        .insert([mensagem])
+        .then(({ data }) => {
+          setMensagem("");
+          setIsMsgEnable(false);
+        });
+    }
+    // setMensagem("");
+    // setIsMsgEnable(false);
   }
 
   async function removerMensagem(mensagem) {
@@ -135,7 +139,7 @@ export default function ChatPage() {
             display: "flex",
             flexDirection: "column",
             backgroundColor: appConfig.theme.colors.light["00"],
-            width: "40%",
+            width: "55%",
             height: "100%",
             maxHeight: "95vh",
           }}
@@ -195,7 +199,7 @@ export default function ChatPage() {
                 value={mensagem}
                 onChange={(ev) => {
                   ev.preventDefault();
-                  if (ev.target.value.length > 0) {
+                  if (ev.target.value.length) {
                     setIsMsgEnable(true);
                   } else {
                     setIsMsgEnable(false);
@@ -204,10 +208,17 @@ export default function ChatPage() {
                   setMensagem(ev.target.value);
                 }}
                 onKeyPress={(ev) => {
-                  console.log(ev);
+                  // console.log(ev);
+                  // if (ev.shiftKey) {
+                  //   console.log("Shift pressed");
+                  // }
                   if (ev.key === "Enter") {
-                    ev.preventDefault();
-                    handleNovaMsg(mensagem);
+                    if (ev.shiftKey) {
+                      setMensagem(mensagem);
+                    } else {
+                      ev.preventDefault();
+                      handleNovaMsg(mensagem);
+                    }
                   }
                 }}
                 placeholder="Sua mensagem..."
@@ -223,6 +234,7 @@ export default function ChatPage() {
                   backgroundColor: appConfig.theme.colors.light["00"],
                   boxShadow: appConfig.theme.colors.light["bs2"],
                   padding: "16px 20px 16px",
+                  whiteSpace: "pre-wrap",
                   color: appConfig.theme.colors.neutrals[300],
                 }}
               />

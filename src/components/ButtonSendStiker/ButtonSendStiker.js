@@ -2,6 +2,15 @@ import React from "react";
 import { Box, Button, Text, Image } from "@skynexui/components";
 import appConfig from "../../../config.json";
 
+import { Grid } from '@giphy/react-components'
+import { GiphyFetch } from '@giphy/js-fetch-api'
+
+// use @giphy/js-fetch-api to fetch gifs, instantiate with your api key
+const gf = new GiphyFetch('n8MvfepusEeY294irysHRYphK8nTVewV')
+
+const fetchGifs = (offset) => gf.trending({ offset, limit: 10, type: 'stickers' })
+
+
 export default function ButtonSendSticker(props) {
   const [isOpen, setOpenState] = React.useState("");
 
@@ -58,6 +67,7 @@ export default function ButtonSendSticker(props) {
             bottom: "30px",
             padding: "16px",
             boxShadow: "rgba(4, 4, 5, 0.15) 0px 0px 0px 1px, rgba(0, 0, 0, 0.24) 0px 8px 16px 0px",
+            overflow: "auto",
           }}
           onClick={() => setOpenState(false)}
         >
@@ -65,11 +75,24 @@ export default function ButtonSendSticker(props) {
             styleSheet={{
               color: appConfig.theme.colors.neutrals["300"],
               fontWeight: "bold",
+              marginBottom: "10px",
             }}
           >
-            Stickers
+            {/* Stickers */}
+            Giphy Trending
           </Text>
-          <Box
+          <Grid
+            width={340}
+            columns={3}
+            fetchGifs={fetchGifs}
+            onGifClick={(gif, e) => {
+              console.log("gif", gif.images);
+              e.preventDefault();
+              if (Boolean(props.onStickerClick)) {
+                    props.onStickerClick(gif.images.original.url.split("?")[0]);
+                  }
+        }} />
+          {/* <Box
             tag="ul"
             styleSheet={{
               display: "flex",
@@ -105,7 +128,7 @@ export default function ButtonSendSticker(props) {
                 <Image src={sticker} />
               </Text>
             ))}
-          </Box>
+          </Box> */}
         </Box>
       )}
     </Box>

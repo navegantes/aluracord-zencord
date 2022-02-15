@@ -162,7 +162,7 @@ export default function MessageList(props) {
                   {mensagem.texto.replace(":sticker:", "").trim().split(" ").slice(1).join(" ")}
                 </>
               ) : (
-                mensagem.texto
+                mensagem.texto.split("\n").map((str) => <p>{str}</p>)
               )}
             </Text>
           </Box>
