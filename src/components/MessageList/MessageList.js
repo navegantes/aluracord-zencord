@@ -11,12 +11,10 @@ export default function MessageList(props) {
       styleSheet={{
         overflowY: "auto",
         overflowAnchor: "auto",
-        // scrollbarColor: appConfig.theme.colors.light["00"],
         scrollbarWidth: "thin",
         display: "flex",
         alignItems: "center",
         flexDirection: "column-reverse",
-        // color: appConfig.theme.colors.light["00"],
         marginBottom: "8px",
         padding: "0px 20px 16px",
       }}
@@ -27,9 +25,6 @@ export default function MessageList(props) {
             key={mensagem.id}
             tag="li"
             styleSheet={{
-              // display: "flex",
-              // flexDirection: "column",
-              // alignSelf: `${props.loggedUser === mensagem.de ? "flex-start" : "flex-end"}`,
               borderRadius: "15px",
               padding: "12px",
               margin: "12px 0px",
@@ -83,7 +78,6 @@ export default function MessageList(props) {
                 <Text
                   styleSheet={{
                     fontSize: "10px",
-                    // marginLeft: "12px",
                   }}
                   tag="span"
                 >
@@ -97,15 +91,12 @@ export default function MessageList(props) {
               {(props.loggedUser === mensagem.de || props.loggedUser === "navegantes") && (
                 <Button
                   label={<Icon name="FaTimes" />}
-                  // iconName="times"
-                  // size="md"
                   buttonColors={{
                     mainColor: appConfig.theme.colors.light["00"],
                     mainColorStrong: appConfig.theme.colors.light["00"],
                   }}
                   onClick={() => {
                     props.removerMensagem(mensagem);
-                    // removerMensagem(mensagem.id);
                   }}
                   styleSheet={{
                     display: "flex",
@@ -127,7 +118,6 @@ export default function MessageList(props) {
                       color: appConfig.theme.colors.neutrals["200"],
                     },
                   }}
-                  // disabled
                 />
               )}
             </Box>
@@ -140,13 +130,12 @@ export default function MessageList(props) {
                 alignItems: `${props.loggedUser === mensagem.de ? "" : "end"}`,
                 fontSize: "14px",
                 color: appConfig.theme.colors.neutrals[300],
-                padding: "0px 10px",
+                padding: "0px 10px 5px",
                 overflow: "auto",
                 scrollbarColor: appConfig.theme.colors.light["scrl"],
                 scrollbarWidth: "thin",
                 wordBreak: "break-all",
                 minWidth: "40wv",
-                // maxHeight: "124px",
               }}
             >
               {mensagem.texto.startsWith(":sticker:") ? (
@@ -155,7 +144,6 @@ export default function MessageList(props) {
                     src={mensagem.texto.replace(":sticker:", "").trim().split(" ")[0]}
                     styleSheet={{
                       maxWidth: "280px",
-                      // width: "110px",
                     }}
                   />
                   {/* Separa o link do sticker da mensagem/legenda */}
@@ -171,11 +159,6 @@ export default function MessageList(props) {
                   display: "flex",
                   justifyContent: `${props.loggedUser === mensagem.de ? "flex-start" : "flex-end"}`,
                   marginRight: "50px",
-                  opacity: "0",
-                  transition: "opacity 1s",
-                  hover: {
-                    opacity: "1",
-                  }
                 }}
               >
                 <Button
