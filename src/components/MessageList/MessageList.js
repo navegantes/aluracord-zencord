@@ -165,6 +165,54 @@ export default function MessageList(props) {
                 mensagem.texto.split("\n").map((str) => <p>{str}</p>)
               )}
             </Text>
+            <Box
+                styleSheet={{
+                  // border: "1px solid red",
+                  display: "flex",
+                  justifyContent: `${props.loggedUser === mensagem.de ? "flex-start" : "flex-end"}`,
+                  marginRight: "50px",
+                  opacity: "0",
+                  transition: "opacity 1s",
+                  hover: {
+                    opacity: "1",
+                  }
+                }}
+              >
+                <Button
+                  label={<Icon name="FaShare" />}
+                  buttonColors={{
+                    mainColor: appConfig.theme.colors.light["00"],
+                    mainColorStrong: appConfig.theme.colors.light["00"],
+                  }}
+                  styleSheet={{
+                  color: appConfig.theme.colors.neutrals["300"],
+                }}
+                />
+                <Button
+                  label={<Icon name="FaShareAlt" />}
+                  buttonColors={{
+                    mainColor: appConfig.theme.colors.light["00"],
+                    mainColorStrong: appConfig.theme.colors.light["00"],
+                  }}
+                  styleSheet={{
+                  color: appConfig.theme.colors.neutrals["300"],
+                }}
+                />
+                <Button
+                  label={<Icon name="FaHeart" />}
+                  buttonColors={{
+                    mainColor: appConfig.theme.colors.light["00"],
+                    mainColorStrong: appConfig.theme.colors.light["00"],
+                  }}
+                  styleSheet={{
+                  color: appConfig.theme.colors.neutrals["300"],
+                }}
+                onClick={(ev) => {
+                  ev.target.style.color = "red";
+                  console.log(ev.target.style);
+                  }}
+                />
+            </Box>
           </Box>
         );
       })}
